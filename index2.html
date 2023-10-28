@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Appointment</title>
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+    ></script>
+    <style>
+      body {
+        background: rgb(141, 221, 227);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="card">
+        <div class="card-body">
+          <h3 class="card-title">Book Your Appointment</h3>
+        
+          <form action="#" onsubmit="registerUser()">
+            <div>
+              <div>
+                <div>
+                  <label for="name" class="form-label">Name:</label>
+                </div>
+                <input type="text" id="name" class="form-control"  autocomplete="first-name"/>
+              </div>
+              <div>
+                <div>
+                  <label for="des" class="form-label">Email:</label>
+                </div>
+                <input type="text" id="des" class="form-control" />
+              </div>
+              
+              <div>
+                <div>
+                  <label for="mobile" class="form-label">Mobile:</label>
+                </div>
+                <input type="text" id="mobile" class="form-control" />
+              </div>
+              <div class="row">
+                <div class="col">
+                  <input
+                    type="submit"
+                    value="Submit"
+                    class="form-control"
+                  />
+                </div>
+              </div>
+            </div>
+          </form>
+          <br />
+          <br />
+          <ul class="items"></ul>
+        </div>
+      </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.0/axios.min.js"></script>
+    <script>
+      function registerUser() {
+        const name = document.getElementById("name").value;
+        const email = document.getElementById("des").value;
+        const mobile= document.getElementById("mobile").value;
+
+        let myObj = {
+          name: name,
+          email: email,
+          mobile:mobile
+        };
+
+        axios.post("https://crudcrud.com/api/757720bfc6274a678d702577c95db5be/appointmentdata",myObj)
+        .then((response)=>{
+          showUsers(response.data)
+          console.log(response)
+        })
+        .catch((err)=>{
+          console.log(Err)
+        })
+      }
+       // let myObj_serial = JSON.stringify(myObj);
+        //localStorage.setItem(des, myObj_serial);
+       //showUsers(myObj);
+      window.addEventListener("DOMContentLoaded", ()=>{
+        axios.get("https://crudcrud.com/api/757720bfc6274a678d702577c95db5be/appointmentdata")
+        .then((response)=>{
+          console.log(response)
+          for(let i=0;i<response.data.length;i++){
+            showUsers(response.data[i])
+          }
+        })
+        .catch((error)=>{
+        console.log(error)})
+      })
+
+      
+      function showUsers(obj) {
+        const parentElem = document.querySelector(".items");
+        const childElem = document.createElement("li");
+        childElem.textContent = obj.name + "  -  " + obj.email + "  -  " + obj.mobile + "  ";
+        const deletebtn = document.createElement("input");
+        const editbtn = document.createElement("input");
+        deletebtn.type = "button";
+        editbtn.type = "button";
+        editbtn.value = "Edit";
+        deletebtn.value = "Delete";
+        deletebtn.onclick = (myobjid) => {
+        axios.delete(`https://crudcrud.com/api/757720bfc6274a678d702577c95db5be/appointmentdata/_id/${myobjid}`)
+        .then((response)=>{
+          parentElem.removeChild(childElem);
+        })
+        .catch((error)=>{
+          console.log(error)
+        })
+          //localStorage.removeItem(obj.des);
+          parentElem.removeChild(childElem);
+        };
+        editbtn.onclick = (myobjid) => {
+          document.getElementById("name").value = obj.name;
+          document.getElementById("des").value = obj.email;
+          document.getElementById("mobile").value = obj.mobile;
+         // localStorage.removeItem(obj._id);
+          parentElem.removeChild(childElem);
+        };
+        childElem.appendChild(deletebtn);
+        childElem.appendChild(editbtn);
+        parentElem.appendChild(childElem);
+      }
+    </script>
+  </body>
+</html>
