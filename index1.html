@@ -76,8 +76,8 @@
 
         let myObj = {
           name: name,
-          des: des,
-          category: category
+          email: email,
+          mobile:mobile
         };
 
         axios.post("https://crudcrud.com/api/757720bfc6274a678d702577c95db5be/appointmentdata",myObj)
@@ -108,23 +108,29 @@
       function showUsers(obj) {
         const parentElem = document.querySelector(".items");
         const childElem = document.createElement("li");
-        childElem.textContent =
-          obj.name + "  -  " + obj.des + "  -  " + obj.category + "  ";
+        childElem.textContent = obj.name + "  -  " + obj.email + "  -  " + obj.mobile + "  ";
         const deletebtn = document.createElement("input");
         const editbtn = document.createElement("input");
         deletebtn.type = "button";
         editbtn.type = "button";
         editbtn.value = "Edit";
         deletebtn.value = "Delete";
-        deletebtn.onclick = () => {
-          localStorage.removeItem(obj.des);
+        deletebtn.onclick = (myobjid) => {
+        axios.delete(`https://crudcrud.com/api/757720bfc6274a678d702577c95db5be/appointmentdata/_id/${myobjid}`)
+        .then((response)=>{
+          parentElem.removeChild(childElem);
+        })
+        .catch((error)=>{
+          console.log(error)
+        })
+          //localStorage.removeItem(obj.des);
           parentElem.removeChild(childElem);
         };
         editbtn.onclick = () => {
           document.getElementById("name").value = obj.name;
-          document.getElementById("des").value = obj.des;
-          document.getElementById("category").value = obj.category;
-          localStorage.removeItem(obj.des);
+          document.getElementById("des").value = obj.email;
+          document.getElementById("mobile").value = obj.mobile;
+          localStorage.removeItem(obj._id);
           parentElem.removeChild(childElem);
         };
         childElem.appendChild(deletebtn);
